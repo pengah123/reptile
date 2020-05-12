@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class LagouSearch {
 
 //获取一个输出流
         File outfile = new File("CompanyName.txt");
-        FileOutputStream fos = new FileOutputStream(outfile, true);
+        FileWriter fos = new FileWriter(outfile, true);
 
 //        解析页面结果
         CompanyName(webDriver, fos);
@@ -35,7 +36,7 @@ public class LagouSearch {
 
     }
 
-    private static void CompanyName(WebDriver webDriver, FileOutputStream fos) throws InterruptedException, IOException {
+    private static void CompanyName(WebDriver webDriver, FileWriter fos) throws InterruptedException, IOException {
 //        遍历公司模块
         List<WebElement> jobelements = webDriver.findElements(By.className("company-item"));
         for (WebElement jobelement : jobelements) {
@@ -43,9 +44,10 @@ public class LagouSearch {
             WebElement companyName = jobelement.findElement(By.className("top")).findElement(By.className("company-name")).findElement(By.tagName("a"));
             String s = companyName.getText();
 //            输出到文件
-            byte[] b = s.getBytes();
-            fos.write(b);
-            fos.write("\r\n".getBytes());
+//            byte[] b = s.getBytes();
+//            fos.write("\r\n".getBytes());
+            fos.write(s);
+            fos.write("\r\n");
             System.out.println(s);
         }
 
@@ -54,15 +56,18 @@ public class LagouSearch {
         if (!pager_next.getAttribute("class").contains("pager_next_disabled")) {
             pager_next.click();
             System.out.println("解析下一页……");
-            fos.write("解析下一页……\r\n".getBytes());
-            fos.write("============================================\r\n".getBytes());
+//            fos.write("解析下一页……\r\n".getBytes());
+//            fos.write("============================================\r\n".getBytes());
+            fos.write("解析下一页……\r\n");
+            fos.write("============================================\r\n");
 
 //            以免点击完由于网络问题没有跳出去就立刻开始解析页面
             Thread.sleep(1000L);
             CompanyName(webDriver, fos);
         } else {
             System.out.println("解析结束");
-            fos.write("解析结束\r\n".getBytes());
+//            fos.write("解析结束\r\n".getBytes());
+            fos.write("解析结束\r\n");
         }
     }
 //筛选条件页面
